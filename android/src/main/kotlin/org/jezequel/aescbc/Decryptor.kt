@@ -21,7 +21,7 @@ class Decryptor(private val mode: Mode, private val call: MethodCall, result: Me
 
     fun handle() {
         executor.execute handleExecutor@ {
-            var processed: ByteArray?
+
             val key = call.argument<ByteArray>("key")
             val iv = call.argument<ByteArray>("iv")
             val data = call.argument<ByteArray>("data")
@@ -39,17 +39,19 @@ class Decryptor(private val mode: Mode, private val call: MethodCall, result: Me
             }
             if (mode == Mode.DECRYPT) {
                 try {
-                    processed = decrypt(data, key, iv)
-                    reply(processed)
+                    var decrypted: ByteArray?
+                    decrypted = decrypt(data, key, iv)
+                    reply(decrypted)
                 } catch (e:Exception) {
-                    replyError(e.message.toString());
+                    replyError(e.message.toString())
                 }
             } else if (mode == Mode.ENCRYPT) {
                 try {
-                    processed = encrypt(data, key, iv)
-                    reply(processed)
+                    var crypted: ByteArray?
+                    crypted = encrypt(data, key, iv)
+                    reply(crypted)
                 } catch (e:Exception) {
-                    replyError(e.message.toString());
+                    replyError(e.message.toString())
                 }
             }
         }
