@@ -38,11 +38,19 @@ class Decryptor(private val mode: Mode, private val call: MethodCall, result: Me
                 return@handleExecutor
             }
             if (mode == Mode.DECRYPT) {
-                processed = decrypt(data, key, iv)
-                reply(processed)
+                try {
+                    processed = decrypt(data, key, iv)
+                    reply(processed)
+                } catch (e:Exception) {
+                    replyError(e.message.toString());
+                }
             } else if (mode == Mode.ENCRYPT) {
-                processed = encrypt(data, key, iv)
-                reply(processed)
+                try {
+                    processed = encrypt(data, key, iv)
+                    reply(processed)
+                } catch (e:Exception) {
+                    replyError(e.message.toString());
+                }
             }
         }
     }
